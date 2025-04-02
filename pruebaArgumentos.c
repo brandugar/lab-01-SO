@@ -16,6 +16,7 @@ int openDirectory(const char *ruta, const char *id, const char *command) {
     int contador = 0;
     FILE *fptr;
     char content[2048];
+    bool found = false;
     
     
      // Compilar la expresión regular
@@ -36,15 +37,7 @@ int openDirectory(const char *ruta, const char *id, const char *command) {
             if (entry->d_type == DT_DIR) {  // verificamos si es un directorio
                     reti = regexec(&regex, entry->d_name , 0, NULL, 0);
 		    if (!reti) {
-			//printf("La carpeta pertenece a un proceso.\n");
-			//contador++;
-			//printf("El nombre de la carpeta es -%s-\n",entry->d_name);
-			// Buscamos si existe el proceso
-
 			if (strcmp(entry->d_name, id) == 0) {
-				//printf("SI EXISTE\n - INFORMACIÓN DEL PROCESO - \n\n");
-				//system(command);
-				
 				fptr = fopen(path, "r");
 				while(fgets(content, 2048, fptr)){
 				 	if (strncmp("Name:", content, 5) == 0) {
@@ -73,6 +66,10 @@ int openDirectory(const char *ruta, const char *id, const char *command) {
 					    strcat(info, content + 28);
 					}
 				}
+				found = true;
+				break;
+		    	}else{
+		    		printf("nonononono");
 		    	}
 		    } else if (reti == REG_NOMATCH) {
 			//printf("La carpeta no pertenece a un proceso.\n");
@@ -81,12 +78,16 @@ int openDirectory(const char *ruta, const char *id, const char *command) {
 			regerror(reti, &regex, error_buf, sizeof(error_buf));
 			printf("Error al hacer la comparación: %s\n", error_buf);
 		    }
-
             }
         }
     }
+    if(found == true){
+    	printf("- INFORMACIÓN DEL PROCESO - \n\n %s",info);
+    }else{
+    	printf("The ID was not found, the process does not exist.");
+    }
     
-    printf("INFO\n\n %s",info);
+    
     
     // Cerramos el archivo
     fclose(fptr);
