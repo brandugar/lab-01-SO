@@ -8,7 +8,7 @@
 typedef struct
 {
 	char pid[16];
-	char info[2048]
+	char info[2048];
 } ProcInfo;
 
 // funcion para abrir el directorio
@@ -167,8 +167,12 @@ int openDirectory(const char *ruta, const char *id, const char *command, char *i
 int main(int argc, char *argv[])
 {
 	char lista[] = "-l";
+	char reporte[] = "-r";
+	FILE *archivoReporte;
 	bool itslist = false;
 	char path[] = "/proc/";
+	char nombre[100] = "psinfo-report";
+	char guion[100] = "-";
 	char command1[30] = "cat ";
 	ProcInfo *procInfos = NULL;
 	int numProcesos = 0;
@@ -203,14 +207,39 @@ int main(int argc, char *argv[])
 				printf("%s\n ", procInfos[i].info);
 			}
 
-			// for (int i = 1; i < argc; i++)
-			// {
-			// 	printf("Argumento %d es %s \n", i, argv[i]);
-			// 	int a = atoi(argv[i]);
-			// 	printf("Valor de a %d \n", a - 1);
-			// }
-
 			free(procInfos);
+		}
+		else if (strcmp(argv[1], reporte) == 0)
+		{
+			numProcesos = argc - 2;
+			procInfos = (ProcInfo *)malloc(numProcesos * sizeof(ProcInfo));
+
+			if (procInfos == NULL)
+			{
+				printf("Error: No se pudo asignar memoria.\n");
+				return 1;
+			}
+			// Almacenar información de cada proceso en las estructuras
+			for (int i = 0; i < numProcesos; i++)
+			{
+				strcpy(procInfos[i].pid, argv[i + 2]);
+				strcat(nombre, guion);
+				strcat(nombre, argv[i + 2]);
+				openDirectory("/proc", argv[i + 2], "", procInfos[i].info);
+			}
+			strcat(nombre, ".info");
+			archivoReporte = fopen(nombre, "w");
+
+			// Mostrar info
+			// printf("-- Información recolectada!!! \n\n");
+			for (int i = 0; i < numProcesos; i++)
+			{
+				fputs(procInfos[i].info, archivoReporte);
+				fputs("\n", archivoReporte);
+			}
+			fclose(archivoReporte);
+			free(procInfos);
+			printf("Archivo de salida generado: %s", nombre);
 		}
 		else
 		{ // No se encuentra el argumento -l
