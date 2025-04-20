@@ -5,8 +5,8 @@ Hi, we're glad to have you here.
 
 ### First at all
 
-Install make : `sudo apt-get install make`
-Execute make: `make`
+- Install make : `sudo apt-get install make`
+- Execute make: `make`
 
 ### To clean de files for a new compilation:
 `make clean`
