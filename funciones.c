@@ -134,15 +134,11 @@ int openDirectory(const char *ruta, const char *id, char *infoMem)
                         break;
                     }
                 }
-                else if (reti == REG_NOMATCH)
-                {
-                    printf("La carpeta no pertenece a un proceso.\n");
-                }
                 else
                 {
                     char error_buf[100];
                     regerror(reti, &regex, error_buf, sizeof(error_buf));
-                    printf("Error al hacer la comparación: %s\n", error_buf);
+                    // printf("Error al hacer la comparación: %s\n", error_buf);
                 }
             }
         }
