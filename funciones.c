@@ -39,7 +39,7 @@ int esNumero(struct dirent *entry)
     return reti;
 }
 
-int openDirectory(const char *ruta, const char *id, const char *command, char *infoMem)
+int openDirectory(const char *ruta, const char *id, char *infoMem)
 {
     struct dirent *entry; // Estructura dirent leer las entradas del directorio
     char path[50];        // Almacenar ruta del archivo (?)
@@ -136,7 +136,7 @@ int openDirectory(const char *ruta, const char *id, const char *command, char *i
                 }
                 else if (reti == REG_NOMATCH)
                 {
-                    // printf("La carpeta no pertenece a un proceso.\n");
+                    printf("La carpeta no pertenece a un proceso.\n");
                 }
                 else
                 {
@@ -189,10 +189,8 @@ int esListaEsReporte(int argc, char *argv[])
     char path[] = "/proc/";
     char nombre[100] = "psinfo-report";
     char guion[100] = "-";
-    char command1[30] = "cat ";
     ProcInfo *procInfos = NULL;
     int numProcesos = 0;
-    int j;
 
     if (argc > 2)
     {
@@ -211,7 +209,7 @@ int esListaEsReporte(int argc, char *argv[])
             for (int i = 0; i < numProcesos; i++)
             {
                 strcpy(procInfos[i].pid, argv[i + 2]);
-                openDirectory("/proc", argv[i + 2], "", procInfos[i].info);
+                openDirectory("/proc", argv[i + 2], procInfos[i].info);
             }
 
             // Mostrar info
@@ -239,7 +237,7 @@ int esListaEsReporte(int argc, char *argv[])
                 strcpy(procInfos[i].pid, argv[i + 2]);
                 strcat(nombre, guion);
                 strcat(nombre, argv[i + 2]);
-                openDirectory("/proc", argv[i + 2], "", procInfos[i].info);
+                openDirectory("/proc", argv[i + 2], procInfos[i].info);
             }
             strcat(nombre, ".info");
             archivoReporte = fopen(nombre, "w");
@@ -269,9 +267,7 @@ int esListaEsReporte(int argc, char *argv[])
     else
     { // Si tiene exactamente 2 argumentos se crea la ruta de la carpeta del proceso a buscar
         strcat(path, argv[1]);
-        strcat(command1, path);
-        strcat(command1, "/status");
-        openDirectory("/proc", argv[1], command1, NULL);
+        openDirectory("/proc", argv[1], NULL);
     }
     return 0;
 }
