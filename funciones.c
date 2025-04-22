@@ -27,13 +27,7 @@ int esNumero(struct dirent *entry)
     }
     // Compilar la expresión regular
     reti = regcomp(&regex, "^[0-9]+$", REG_EXTENDED);
-    // Verficar si existe reti --Retorno al compilar la expresión regular
-    if (reti)
-    {
-        printf("Error al compilar la expresión regular.\n");
 
-        exit(1);
-    }
     // verificamos si es un directorio
     reti = regexec(&regex, entry->d_name, 0, NULL, 0);
     return reti;
@@ -42,7 +36,7 @@ int esNumero(struct dirent *entry)
 int openDirectory(const char *ruta, const char *id, char *infoMem)
 {
     struct dirent *entry; // Estructura dirent leer las entradas del directorio
-    char path[50];        // Almacenar ruta del archivo (?)
+    char path[50];        // Almacenaremos la ruta de los procesos
     // Construir ruta del archivo
     snprintf(path, sizeof(path), "%s/%s/status", ruta, id);
 
@@ -51,9 +45,9 @@ int openDirectory(const char *ruta, const char *id, char *infoMem)
 
     DIR *dir = opendir(ruta); // Puntero hacia un directorio abierto
     int contador = 0;         // Contadora
-    FILE *fptr;               // puntero a algun lado (?)
+    FILE *fptr;               // puntero que usaremos para la carpeta del proceso a buscar
     char content[2048];       // Contenido de cada linea del archivo status
-    bool found = false;       // bandera (?)
+    bool found = false;       // bandera que indica que el proceso fue encontrado
 
     // Abrir directorio
     if (dir == NULL) // No existe
