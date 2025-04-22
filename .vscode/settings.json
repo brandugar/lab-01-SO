@@ -1,5 +1,7 @@
 {
     "files.associations": {
         "stdlib.h": "c"
-    }
+    },
+    "workbench.preferredDarkColorTheme": "Visual Studio Dark - C++",
+    "workbench.colorTheme": "Visual Studio Dark - C++"
 }
