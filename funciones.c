@@ -25,8 +25,6 @@ int esNumero(struct dirent *entry)
 
         exit(1);
     }
-    // Compilar la expresión regular
-    reti = regcomp(&regex, "^[0-9]+$", REG_EXTENDED);
 
     // verificamos si es un directorio
     reti = regexec(&regex, entry->d_name, 0, NULL, 0);
